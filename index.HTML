@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo de los Ángeles y Finanzas</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7918726151133022"
+     crossorigin="anonymous"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Great+Vibes&family=Quicksand:wght@300;500&display=swap');
+
+        :root {
+            --oro: #efd382;
+            --oro-oscuro: #b8860b;
+            --fondo-modal: #fffdf7;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0; padding: 10px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #fdfdfd;
+            background: linear-gradient(125deg, #050505, #1a1b3a, #2d1b4d, #050505);
+            background-size: 400% 400%;
+            animation: nebulosa 15s ease infinite;
+        }
+
+        @keyframes nebulosa { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Bloqueo Legal Obligatorio */
+        #pantallaLegal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(15px);
+        }
+        .caja-legal {
+            background: var(--fondo-modal); color: #1a1a2e; padding: 30px;
+            border-radius: 15px; border: 3px double var(--oro-oscuro);
+            max-width: 450px; width: 90%; text-align: center;
+        }
+
+        h1 { font-family: 'Cinzel', serif; color: var(--oro); text-align: center; margin-bottom: 5px; }
+
+        /* Estilos de la Oración Diaria */
+        .contenedor-oracion {
+            max-width: 600px; width: 90%; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--oro); border-radius: 15px;
+            padding: 20px; margin: 20px 0; text-align: center;
+            backdrop-filter: blur(5px);
+        }
+        .oracion-texto {
+            font-family: 'Great Vibes', cursive; font-size: 1.8rem;
+            color: var(--oro); margin-bottom: 10px; line-height: 1.2;
+        }
+
+        /* Grid de Cartas */
+        .grid-mazo { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 20px; width: 100%; max-width: 1000px; padding: 20px;
+        }
+        .carta {
+            width: 100%; height: 210px; position: relative;
+            transform-style: preserve-3d; transition: 0.6s; cursor: pointer;
+        }
+        .carta.girada { transform: rotateY(180deg); }
+        .cara, .dorso {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 12px;
+            border: 1px solid var(--oro); display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .dorso { background: rgba(255,255,255,0.1); color: var(--oro); font-size: 2rem; }
+        .cara { transform: rotateY(180deg); background: #1a1a2e; padding: 10px; box-sizing: border-box; }
+
+        /* Modal de Lectura */
+        #capaFondo { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; }
+        #modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--fondo-modal); color: #333; padding: 25px; border-radius: 15px;
+            width: 85%; max-width: 450px; z-index: 1001; max-height: 85vh; overflow-y: auto;
+        }
+        .seccion { margin-bottom: 10px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .etiq { font-family: 'Cinzel'; font-size: 0.65rem; color: #7d6608; font-weight: bold; }
+        .caja-f { background: #fdf5e6; padding: 10px; border-left: 4px solid var(--oro-oscuro); border-radius: 4px; margin-top: 5px; }
+        .btn { background: #25d366; color: white; padding: 12px; border: none; border-radius: 25px; width: 100%; cursor: pointer; font-family: 'Cinzel'; font-weight: bold; margin-top: 10px; text-decoration: none; display: block; text-align: center; }
+        .btn-copiar { background: none; border: 1px solid var(--oro); color: var(--oro); padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="pantallaLegal">
+        <div class="caja-legal">
+            <h2 style="font-family:'Cinzel'">Aviso Recreativo</h2>
+            <p style="font-size: 0.85rem;">Este sitio es para entretenimiento. Los mensajes espirituales y financieros no son consejos profesionales.</p>
+            <button class="btn" onclick="aceptarTerminos()">ACEPTO Y ENTRAR</button>
+        </div>
+    </div>
+
+    <h1>Oráculo de los Ángeles</h1>
+    <p id="fecha" style="color: var(--oro); font-family: 'Cinzel'; font-size: 0.8rem;"></p>
+
+    <div class="contenedor-oracion">
+        <div id="txtOracion" class="oracion-texto"></div>
+        <button class="btn-copiar" onclick="copiarOracion()">Copiar Oración del Día</button>
+    </div>
+
+    <div class="grid-mazo" id="mazo"></div>
+
+    <div id="capaFondo" onclick="cerrar()"></div>
+    <div id="modal">
+        <h2 id="signoNombre" style="text-align:center; font-family:'Cinzel'; color: #7d6608; margin-top:0;"></h2>
+        <div class="seccion"><span class="etiq">✨ ÁNGEL GUÍA</span><div id="rAngel"></div></div>
+        <div class="seccion"><span class="etiq">❤️ AMOR</span><div id="rAmor"></div></div>
+        <div class="seccion"><span class="etiq">🌿 SALUD</span><div id="rSalud"></div></div>
+        <div class="seccion"><span class="etiq">💼 TRABAJO</span><div id="rTrabajo"></div></div>
+        <div class="seccion"><span class="etiq">💰 DINERO</span><div id="rDinero"></div></div>
+        <div class="caja-f"><span class="etiq">📊 CONSEJO FINANCIERO</span><div id="rFinanzas" style="font-style: italic;"></div></div>
+        
+        <a id="wa" class="btn" target="_blank">📲 COMPARTIR MENSAJE</a>
+        <button onclick="cerrar()" style="background:none; border:none; width:100%; margin-top:10px; text-decoration:underline; cursor:pointer; color: #666;">Cerrar</button>
+    </div>
+
+<script>
+    const hoy = new Date();
+    const semilla = hoy.getDate() + (hoy.getMonth() * 31) + hoy.getFullYear();
+    document.getElementById('fecha').innerText = hoy.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    const biblioteca = {
+        angeles: ["Arcángel Miguel", "Arcángel Gabriel", "Arcángel Rafael", "Arcángel Uriel", "Arcángel Chamuel", "Arcángel Jofiel", "Arcángel Zadquiel"],
+        amor: ["Sana tu corazón con perdón.", "El amor propio es tu prioridad.", "Una nueva luz llega a tu relación.", "Confía en los tiempos del universo.", "La comunicación abrirá puertas."],
+        salud: ["Busca equilibrio y descanso.", "Conecta con la naturaleza.", "Escucha los mensajes de tu cuerpo.", "La paz mental es tu medicina.", "Respira luz y exhala tensiones."],
+        trabajo: ["Una oportunidad brilla para ti.", "Tus talentos serán reconocidos.", "Mantén el enfoque en tus metas.", "La creatividad es tu mejor herramienta.", "Un cambio positivo se aproxima."],
+        dinero: ["La abundancia fluye hacia ti.", "Agradece lo que ya posees.", "Nuevas fuentes de ingreso aparecen.", "Tu mente atrae prosperidad.", "El universo provee con generosidad."],
+        finanzas: ["Ahorra una parte de tus ingresos hoy.", "Evita gastos impulsivos por emoción.", "La educación financiera es poder.", "Revisa tus suscripciones innecesarias.", "Organiza tus deudas con un plan real."],
+        oraciones: [
+            "\"Ángel de mi guarda, ilumina mi camino y protege mis pasos en este bendecido día.\"",
+            "\"Amado Arcángel Uriel, llena mi mente de sabiduría y mis manos de abundancia infinita.\"",
+            "\"Gratitud por la salud que habita en mí y la paz que rodea mi corazón hoy y siempre.\"",
+            "\"Ángeles de luz, abran las puertas de la prosperidad y guíen mis decisiones financieras.\"",
+            "\"En este día, elijo la paz, el amor y la confianza de que el Universo provee todo lo que necesito.\""
+        ]
+    };
+
+    const signos = [
+        { n: "Aries", s: "♈" }, { n: "Tauro", s: "♉" }, { n: "Géminis", s: "♊" },
+        { n: "Cáncer", s: "♋" }, { n: "Leo", s: "♌" }, { n: "Virgo", s: "♍" },
+        { n: "Libra", s: "♎" }, { n: "Escorpio", s: "♏" }, { n: "Sagitario", s: "♐" },
+        { n: "Capricornio", s: "♑" }, { n: "Acuario", s: "♒" }, { n: "Piscis", s: "♓" }
+    ];
+
+    function aceptarTerminos() {
+        localStorage.setItem('legal_aceptado', 'si');
+        document.getElementById('pantallaLegal').style.display = 'none';
+    }
+
+    function iniciar() {
+        if(localStorage.getItem('legal_aceptado')) document.getElementById('pantallaLegal').style.display = 'none';
+        
+        // Cargar Oración Diaria (cambia según la semilla del día)
+        document.getElementById('txtOracion').innerText = biblioteca.oraciones[semilla % biblioteca.oraciones.length];
+
+        const mazo = document.getElementById('mazo');
+        signos.forEach((sig, i) => {
+            const div = document.createElement('div');
+            div.className = 'carta';
+            div.innerHTML = `<div class="dorso">✨</div><div class="cara"><span style="font-size:2rem; color:var(--oro)">${sig.s}</span><small style="color:white; font-family:'Cinzel'">${sig.n}</small></div>`;
+            div.onclick = () => {
+                div.classList.add('girada');
+                setTimeout(() => mostrarLectura(sig, i), 300);
+            };
+            mazo.appendChild(div);
+        });
+    }
+
+    function mostrarLectura(sig, i) {
+        const sel = (lista, desfase) => lista[(semilla + i + desfase) % lista.length];
+
+        document.getElementById('signoNombre').innerText = sig.n;
+        document.getElementById('rAngel').innerText = sel(biblioteca.angeles, 0);
+        document.getElementById('rAmor').innerText = sel(biblioteca.amor, 1);
+        document.getElementById('rSalud').innerText = sel(biblioteca.salud, 2);
+        document.getElementById('rTrabajo').innerText = sel(biblioteca.trabajo, 3);
+        document.getElementById('rDinero').innerText = sel(biblioteca.dinero, 4);
+        document.getElementById('rFinanzas').innerText = sel(biblioteca.finanzas, 5);
+
+        const msj = encodeURIComponent(`👼 Guía para ${sig.n}:\n✨ Ángel: ${document.getElementById('rAngel').innerText}\n📊 Finanzas: ${document.getElementById('rFinanzas').innerText}`);
+        document.getElementById('wa').href = `https://wa.me/?text=${msj}`;
+
+        document.getElementById('modal').style.display = 'block';
+        document.getElementById('capaFondo').style.display = 'block';
+    }
+
+    function cerrar() {
+        document.getElementById('modal').style.display = 'none';
+        document.getElementById('capaFondo').style.display = 'none';
+        document.querySelectorAll('.carta').forEach(c => c.classList.remove('girada'));
+    }
+
+    function copiarOracion() {
+        const texto = document.getElementById('txtOracion').innerText;
+        navigator.clipboard.writeText(texto).then(() => {
+            alert("Oración copiada al portapapeles");
+        });
+    }
+
+    window.onload = iniciar;
+</script>
+</body>
+</html>
