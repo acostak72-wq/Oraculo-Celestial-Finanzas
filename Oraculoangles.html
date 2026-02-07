@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oráculo Celestial: Guía Angelical, Abundancia y Bienestar</title>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7918726151133022" crossorigin="anonymous"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --oro: #efd382; --oro-os: #b8860b;
+            --noche: #0c0c1a; --crema: #fffdf7;
+            --vidrio: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at center, #1a1b3a 0%, #050505 100%);
+            color: white; margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            overflow-x: hidden;
+        }
+
+        canvas#polvoEstelar { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
+
+        header { text-align: center; padding: 60px 20px 20px; z-index: 10; }
+        h1 { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--oro); margin: 0; letter-spacing: 5px; text-shadow: 0 0 20px rgba(239, 211, 130, 0.3); }
+        #fecha { color: var(--oro); letter-spacing: 3px; font-size: 0.85rem; margin-top: 10px; font-weight: bold; }
+
+        /* Sección de Decreto Diario */
+        .seccion-decreto {
+            background: var(--vidrio); border: 1px solid rgba(239, 211, 130, 0.3);
+            padding: 30px; border-radius: 25px; margin: 30px 20px; text-align: center; 
+            max-width: 650px; backdrop-filter: blur(10px); z-index: 10;
+        }
+        .etiqueta-oro { font-family: 'Cinzel', serif; color: var(--oro); font-size: 0.75rem; letter-spacing: 2px; display: block; margin-bottom: 15px; }
+        #txtDecreto { font-size: 1.4rem; line-height: 1.6; font-style: italic; color: #fff; margin-bottom: 25px; }
+
+        /* Mazo de Cartas Adaptable */
+        .grid-mazo {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 20px; width: 90%; max-width: 1000px; padding: 20px 0; z-index: 10;
+        }
+        .carta { perspective: 1000px; height: 190px; cursor: pointer; }
+        .carta-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .carta.girada .carta-inner { transform: rotateY(180deg); }
+        .cara, .dorso { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; border: 1px solid var(--oro-os); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .dorso { background: linear-gradient(135deg, #161632 0%, #050505 100%); color: var(--oro); font-size: 2.5rem; box-shadow: inset 0 0 20px rgba(239,211,130,0.1); }
+        .cara { background: var(--noche); transform: rotateY(180deg); }
+        .cara span { font-size: 3rem; margin-bottom: 10px; }
+        .cara small { font-family: 'Cinzel'; color: var(--oro); font-size: 0.8rem; }
+
+        /* Sección Educativa (Significado de Ángeles) */
+        .contenido-educativo {
+            max-width: 850px; padding: 60px 20px; color: #aaa; line-height: 1.8; text-align: justify;
+            border-top: 1px solid #222; margin-top: 40px; z-index: 10;
+        }
+        .contenido-educativo h2 { color: var(--oro); font-family: 'Cinzel'; border-bottom: 1px solid var(--oro-os); display: inline-block; }
+        .grid-angeles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .angel-box { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; border-left: 4px solid var(--oro); }
+        .angel-box h3 { font-family: 'Cinzel'; color: var(--oro); margin-top: 0; font-size: 1rem; }
+
+        /* Modal de Resultados Profundo */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; overflow-y: auto; }
+        .modal-content { background: var(--crema); color: #222; padding: 40px; border-radius: 30px; width: 85%; max-width: 450px; margin: 40px auto; box-shadow: 0 0 60px var(--oro); }
+        .modal-header { text-align: center; border-bottom: 2px solid var(--oro); margin-bottom: 20px; padding-bottom: 10px; }
+        .res-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .res-item strong { display: block; font-family: 'Cinzel'; color: var(--oro-os); font-size: 0.7rem; letter-spacing: 1px; }
+        .res-item span { font-size: 0.95rem; line-height: 1.4; display: block; margin-top: 5px; }
+
+        /* Banner de Consentimiento y Botones */
+        #bannerAviso { position: fixed; bottom: 0; left: 0; width: 100%; background: #000; color: #fff; padding: 25px; text-align: center; z-index: 20000; border-top: 3px solid var(--oro); box-shadow: 0 -10px 30px rgba(0,0,0,0.8); }
+        .btn { background: none; border: 1px solid var(--oro); color: var(--oro); padding: 12px 25px; border-radius: 35px; cursor: pointer; font-family: 'Cinzel'; transition: 0.3s; text-decoration: none; display: inline-block; font-size: 0.8rem; }
+        .btn:hover { background: var(--oro); color: black; font-weight: bold; }
+        .btn-ws { background: #25d366; color: white; border: none; width: 100%; padding: 15px; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
+
+        footer { padding: 50px 20px; font-size: 0.8rem; color: #555; text-align: center; border-top: 1px solid #222; width: 100%; }
+        footer a { color: var(--oro-os); text-decoration: none; margin: 0 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <canvas id="polvoEstelar"></canvas>
+
+    <header>
+        <h1>ORÁCULO CELESTIAL</h1>
+        <div id="fecha"></div>
+    </header>
+
+    <section class="seccion-decreto">
+        <span class="etiqueta-oro">Decreto de Abundancia</span>
+        <p id="txtDecreto"></p>
+        <button class="btn" onclick="copiar()">Copiar Oración</button>
+    </section>
+
+    <main class="grid-mazo" id="mazo"></main>
+
+    <article class="contenido-educativo">
+        <h2>Sabiduría Divina y los Siete Arcángeles</h2>
+        <p>El <strong>Oráculo Celestial</strong> es una plataforma de guía espiritual diseñada para alinear tu energía con las leyes universales de la prosperidad. Cada mensaje está inspirado en la vibración de los arcángeles, seres de luz que actúan como puentes hacia nuestra realización personal y financiera.</p>
+        
+        <div class="grid-angeles">
+            <div class="angel-box">
+                <h3>Arcángel Miguel</h3>
+                <p>El líder de los ejércitos celestiales. Aporta protección contra el miedo y fuerza para tomar decisiones valientes en el trabajo y la vida personal.</p>
+            </div>
+            <div class="angel-box">
+                <h3>Arcángel Uriel</h3>
+                <p>El "Fuego de Dios". Es el encargado de la abundancia material, las ideas brillantes y la resolución de conflictos financieros.</p>
+            </div>
+            <div class="angel-box">
+                <h3>Arcángel Rafael</h3>
+                <p>El sanador divino. Su energía restaura la salud física y equilibra las emociones dentro del núcleo familiar y las relaciones.</p>
+            </div>
+            <div class="angel-box">
+                <h3>Arcángel Gabriel</h3>
+                <p>El comunicador. Guía a los artistas, escritores y ayuda en la claridad de los mensajes amorosos y proyectos creativos.</p>
+            </div>
+        </div>
+    </article>
+
+    <div id="modal" onclick="cerrar()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 id="mSigno" style="font-family:'Cinzel'; margin:0; color:var(--oro-os);"></h2>
+            </div>
+            <div class="res-item"><strong>👼 GUÍA DE LOS ÁNGELES</strong><span id="mGuia"></span></div>
+            <div class="res-item"><strong>💰 DINERO Y PROSPERIDAD</strong><span id="mDin"></span></div>
+            <div class="res-item"><strong>💼 TRABAJO Y CARRERA</strong><span id="mTra"></span></div>
+            <div class="res-item"><strong>❤️ AMOR Y CORAZÓN</strong><span id="mAmor"></span></div>
+            <div class="res-item"><strong>🏠 FAMILIA Y HOGAR</strong><span id="mFam"></span></div>
+            <div class="res-item"><strong>🌿 SALUD Y ENERGÍA</strong><span id="mSal"></span></div>
+            
+            <button class="btn btn-ws" onclick="compartir()">COMPARTIR BENDICIÓN</button>
+            <button onclick="cerrar()" style="width:100%; margin-top:15px; background:none; border:none; color:#999; cursor:pointer; text-decoration:underline;">Cerrar Oráculo</button>
+        </div>
+    </div>
+
+    <div id="bannerAviso">
+        <p style="margin-bottom: 15px; font-size: 0.9rem;">Este sitio web ofrece consejos con fines de <strong>entretenimiento, motivación y crecimiento espiritual</strong>. Al continuar, aceptas el uso de cookies y nuestros términos de servicio.</p>
+        <button class="btn" onclick="aceptarCondiciones()">ACEPTAR Y CONSULTAR</button>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px;">
+            <a onclick="alert('Política de Privacidad: Usamos AdSense para financiar este servicio gratuito.')">Privacidad</a> | 
+            <a onclick="alert('Términos: Uso bajo responsabilidad del usuario.')">Términos</a> | 
+            <a onclick="alert('Contacto: Envíanos un mensaje a través de nuestro portal.')">Contacto</a>
+        </div>
+        © 2026 Oráculo Celestial | ca-pub-7918726151133022
+    </footer>
+
+    <script>
+        const DATA = {
+            signos: [{n:"Aries",e:"♈"},{n:"Tauro",e:"♉"},{n:"Géminis",e:"♊"},{n:"Cáncer",e:"♋"},{n:"Leo",e:"♌"},{n:"Virgo",e:"♍"},{n:"Libra",e:"♎"},{n:"Escorpio",e:"♏"},{n:"Sagitario",e:"♐"},{n:"Capricornio",e:"♑"},{n:"Acuario",e:"♒"},{n:"Piscis",e:"♓"}],
+            angeles: ["Miguel", "Uriel", "Rafael", "Gabriel", "Jofiel", "Chamuel", "Zadquiel"],
+            consejos: {
+                guia: ["Escucha el silencio, ahí está tu respuesta.", "Un cambio de dirección trae bendiciones.", "Estás protegido bajo alas de luz.", "La fe mueve montañas en tu camino."],
+                dinero: ["La abundancia es tu derecho de nacimiento.", "Organiza tus finanzas para que el dinero fluya.", "Un ingreso inesperado se manifiesta pronto.", "Siembra generosidad y cosecharás fortuna."],
+                trabajo: ["Tu talento será valorado por manos justas.", "Es momento de liderar con el corazón.", "Se cierra un ciclo tedioso, inicia uno brillante.", "La creatividad es tu mejor herramienta hoy."],
+                amor: ["El amor que buscas está dentro de ti.", "Una conexión del pasado trae un mensaje.", "Abre tu comunicación con ternura.", "Merezcas un amor que te brinde paz."],
+                familia: ["La armonía sana las viejas heridas.", "Un miembro de la familia necesita tu luz.", "Celebra las pequeñas victorias en casa.", "El perdón libera el flujo de bendiciones."],
+                salud: ["Tu cuerpo agradece el descanso profundo.", "Conecta con la naturaleza para recargar.", "La paz mental es la base de tu salud.", "Nutre tu espíritu con pensamientos positivos."]
+            },
+            decretos: [
+                "Soy un imán para la abundancia y la paz infinita.",
+                "Mi vida está guiada por la luz divina en cada paso.",
+                "Gracias universo por las bendiciones que recibo hoy.",
+                "Abro mis brazos al éxito, al amor y a la salud perfecta."
+            ]
+        };
+
+        const fechaActual = new Date();
+        const semillaDia = fechaActual.getDate() + fechaActual.getMonth() + fechaActual.getFullYear();
+
+        function init() {
+            document.getElementById('fecha').innerText = fechaActual.toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'}).toUpperCase();
+            document.getElementById('txtDecreto').innerText = `"${DATA.decretos[semillaDia % DATA.decretos.length]}"`;
+            
+            const mazo = document.getElementById('mazo');
+            DATA.signos.forEach((s, i) => {
+                const card = document.createElement('div');
+                card.className = 'carta';
+                card.innerHTML = `<div class="carta-inner"><div class="dorso">✨</div><div class="cara"><span>${s.e}</span><small>${s.n}</small></div></div>`;
+                card.onclick = () => { card.classList.add('girada'); setTimeout(() => mostrar(s, i), 600); };
+                mazo.appendChild(card);
+            });
+            initCanvas();
+        }
+
+        function mostrar(s, i) {
+            const idx = (semillaDia + i);
+            document.getElementById('mSigno').innerText = s.n.toUpperCase();
+            document.getElementById('mGuia').innerText = "Arcángel " + DATA.angeles[idx % DATA.angeles.length] + ": " + DATA.consejos.guia[idx % 4];
+            document.getElementById('mDin').innerText = DATA.consejos.dinero[idx % 4];
+            document.getElementById('mTra').innerText = DATA.consejos.trabajo[idx % 4];
+            document.getElementById('mAmor').innerText = DATA.consejos.amor[idx % 4];
+            document.getElementById('mFam').innerText = DATA.consejos.familia[idx % 4];
+            document.getElementById('mSal').innerText = DATA.consejos.salud[idx % 4];
+            
+            window.currentSign = s.n;
+            window.currentAdvice = DATA.consejos.dinero[idx % 4];
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function cerrar() {
+            document.getElementById('modal').style.display = 'none';
+            document.querySelectorAll('.carta').forEach(c => c.classList.remove('girada'));
+        }
+
+        function compartir() {
+            const texto = `✨ Mi Oráculo Celestial para ${window.currentSign}:\n💰 Dinero: ${window.currentAdvice}\n\nConsulta el tuyo aquí: ${window.location.href}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`);
+        }
+
+        function copiar() {
+            navigator.clipboard.writeText(document.getElementById('txtDecreto').innerText);
+            alert("Oración de luz copiada. ✨");
+        }
+
+        function aceptarCondiciones() {
+            document.getElementById('bannerAviso').style.display = 'none';
+        }
+
+        function initCanvas() {
+            const canvas = document.getElementById('polvoEstelar');
+            const ctx = canvas.getContext('2d');
+            let particulas = [];
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            window.addEventListener('mousemove', (e) => {
+                for(let i=0; i<2; i++) {
+                    particulas.push({
+                        x: e.clientX, y: e.clientY,
+                        vX: Math.random() * 2 - 1, vY: Math.random() * 2 - 1,
+                        size: Math.random() * 2 + 1, alpha: 1
+                    });
+                }
+            });
+
+            function animar() {
+                ctx.clearRect(0,0,canvas.width, canvas.height);
+                particulas.forEach((p, i) => {
+                    p.x += p.vX; p.y += p.vY; p.alpha -= 0.01;
+                    ctx.fillStyle = `rgba(239, 211, 130, ${p.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    if(p.alpha <= 0) particulas.splice(i, 1);
+                });
+                requestAnimationFrame(animar);
+            }
+            animar();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
